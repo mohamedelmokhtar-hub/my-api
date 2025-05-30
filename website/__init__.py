@@ -5,7 +5,6 @@ db = SQLAlchemy()
 db_name = 'mokhtar'
 
 def create_app():
-    print("Creating app...")
     app = Flask(__name__)
     print("Flask app instance created")
 
@@ -13,20 +12,15 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://root:06082004@localhost/{db_name}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
-    print("DB initialized")
 
     from .view import views
     from .auth import auth
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/auth')
-    print("Blueprints registered")
 
     from .models import User, Note
-    print("Models imported")
 
     with app.app_context():
-        print("Creating tables...")
         db.create_all()
-        print("Tables created")
 
     return app
